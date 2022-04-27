@@ -1,0 +1,53 @@
+const express = require("express")
+const speciesrouter = express.Router()
+
+
+speciesrouter.get("/", (req, res) => {
+    res.status(200).json({ msg: "learn about species" })
+})
+
+const species = [
+    {
+        id: 1,
+        name: 'Rose',
+        species: 'Rosa abrica '
+    },
+    {
+        id: 2,
+        name: 'Lilly',
+        species: 'Lilium akkusianum'
+    },
+    {
+        id: 3,
+        name: 'mums',
+        species: 'Chrysanthemum'
+    }
+]
+speciesrouter.get('/species', (req, res) => {
+    res.json(species);
+});
+
+speciesrouter.route("/")
+    .get((req, res) => {
+        res.status(200).json({ typesofspecies: species })
+    })
+    .post((req, res) => {
+        // take a form
+        const body = req.body
+        species.push(body)
+        res.status(201).json({ typesofspecies: species[species.length - 1] })
+    })
+
+speciesrouter.route("/:id")
+    .get((req, res) => {
+        const id = req.params.id
+        if (id >= species.length) {
+            res.status(404).json({ message: "Type Doesn't Exist" })
+        } else {
+            res.status(200).json({ typesofspecies: species[id] })
+        }
+    })
+    
+
+
+module.exports = speciesrouter
